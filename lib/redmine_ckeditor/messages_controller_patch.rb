@@ -1,16 +1,35 @@
+require_dependency 'messages_controller'
+
 module RedmineCkeditor
   module MessagesControllerPatch
-    def quote
-      unless RedmineCkeditor.enabled?
-        return super
+    def self.included(base)
+      base.send(:include, InstanceMethods)
+
+      base.class_eval do
+        unloadable
+
+        # alias_method_chain :quote, :ckeditor
+        alias_method :quote_without_ckeditor, :quote
+        alias_method :quote, :quote_with_ckeditor
       end
+    end
 
-      @subject = @message.subject
-      @subject = "RE: #{@subject}" unless @subject.starts_with?('RE:')
-      @content = "<p>#{ll(I18n.locale, :text_user_wrote, @message.author)}</p>"
-      @content << "<blockquote>#{ActionView::Base.full_sanitizer.sanitize(@message.content.to_s)}</blockquote><p/>"
+    module InstanceMethods
+      def quote_with_ckeditor
+        unless RedmineCkeditor.enabled?
+          quote_without_ckeditor
+          return
+        end
 
-      render "quote_with_ckeditor"
+        @subject = @message.subject
+        @subject = "RE: #{@subject}" unless @subject.starts_with?('RE:')
+        @content = "<p>#{ll(I18n.locale, :text_user_wrote, @message.author)}</p>"
+        @content << "<blockquote>#{ActionView::Base.full_sanitizer.sanitize(@message.content.to_s)}</blockquote><p/>"
+
+        render "quote_with_ckeditor"
+      end
     end
   end
+
+  MessagesController.send(:include, MessagesControllerPatch)
 end

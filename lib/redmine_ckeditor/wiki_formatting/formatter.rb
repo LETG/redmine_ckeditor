@@ -1,5 +1,6 @@
 module RedmineCkeditor::WikiFormatting
   class Formatter
+    include ActionView::Helpers::SanitizeHelper
     include Redmine::WikiFormatting::LinksHelper
 
     def initialize(text)
@@ -24,7 +25,8 @@ module RedmineCkeditor::WikiFormatting
       }
 
       auto_link!(text)
-      text = ActionView::Base.white_list_sanitizer.sanitize(text,
+      # text = ActionView::Base.white_list_sanitizer.sanitize(text,
+      text = sanitize(text,
         :tags => RedmineCkeditor.allowed_tags,
         :attributes => RedmineCkeditor.allowed_attributes
       )

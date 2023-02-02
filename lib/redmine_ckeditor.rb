@@ -128,22 +128,16 @@ module RedmineCkeditor
     end
 
     def apply_patch
-      ::ApplicationController.send :helper, ApplicationHelperPatch
-      ::JournalsController.prepend JournalsControllerPatch
-      ::MailHandler.prepend MailHandlerPatch
-      ::MessagesController.prepend MessagesControllerPatch
-      ::QueriesController.send :helper, QueriesHelperPatch
-      ::Rich::FilesController.send :helper, RichFilesHelperPatch
+      require File.join(File.dirname(__FILE__), 'application_helper')
+      require File.join(File.dirname(__FILE__), 'queries_helper')
+      require File.join(File.dirname(__FILE__), 'redmine_ckeditor/rich_files_helper_patch')
+      require File.join(File.dirname(__FILE__), 'redmine_ckeditor/journals_controller_patch')
+      require File.join(File.dirname(__FILE__), 'redmine_ckeditor/messages_controller_patch')
+      require File.join(File.dirname(__FILE__), 'redmine_ckeditor/mail_handler_patch')
     end
   end
 end
 
-require 'redmine_ckeditor/helper'
-require 'redmine_ckeditor/application_helper_patch'
-require 'redmine_ckeditor/queries_helper_patch'
-require 'redmine_ckeditor/rich_files_helper_patch'
-require 'redmine_ckeditor/journals_controller_patch'
-require 'redmine_ckeditor/messages_controller_patch'
-require 'redmine_ckeditor/mail_handler_patch'
-require 'redmine_ckeditor/pdf_patch'
-require 'redmine_ckeditor/tempfile_patch'
+require File.join(File.dirname(__FILE__), 'redmine_ckeditor/hooks/journal_listener')
+require File.join(File.dirname(__FILE__), 'redmine_ckeditor/p_d_f_patch')
+require File.join(File.dirname(__FILE__), 'tempfile')

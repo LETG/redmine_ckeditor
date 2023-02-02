@@ -1,7 +1,10 @@
 require 'redmine'
-require 'redmine_ckeditor'
 
-ActiveSupport::Reloader.to_prepare do
+# require 'redmine_ckeditor'
+require File.join(File.dirname(__FILE__), 'lib/redmine_ckeditor/hooks/journal_listener')
+require File.join(File.dirname(__FILE__), 'lib/redmine_ckeditor')
+
+Rails.application.config.to_prepare do
   RedmineCkeditor.apply_patch
 end
 
@@ -9,8 +12,8 @@ Redmine::Plugin.register :redmine_ckeditor do
   name 'Redmine CKEditor plugin'
   author 'Akihiro Ono'
   description 'This is a CKEditor plugin for Redmine'
-  version '1.2.3'
-  requires_redmine :version_or_higher => '4.0.0'
+  version '1.1.5'
+  requires_redmine :version_or_higher => '3.0.0'
   url 'http://github.com/a-ono/redmine_ckeditor'
 
   settings(:partial => 'settings/ckeditor')
@@ -19,4 +22,4 @@ Redmine::Plugin.register :redmine_ckeditor do
     RedmineCkeditor::WikiFormatting::Helper
 end
 
-(Loofah::VERSION >= "2.3.0" ? Loofah::HTML5::SafeList : Loofah::HTML5::WhiteList)::ALLOWED_PROTOCOLS.replace RedmineCkeditor.allowed_protocols
+Loofah::HTML5::WhiteList::ALLOWED_PROTOCOLS.replace RedmineCkeditor.allowed_protocols

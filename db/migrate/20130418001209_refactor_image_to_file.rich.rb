@@ -1,5 +1,5 @@
 # This migration comes from rich (originally 20111201095829)
-class RefactorImageToFile < ActiveRecord::Migration[4.2]
+class RefactorImageToFile < ActiveRecord::Migration
   def change
     rename_table :rich_rich_images, :rich_rich_files
 
