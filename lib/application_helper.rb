@@ -20,6 +20,6 @@ module ApplicationHelper
   end
 
   # alias_method_chain :format_activity_description, :ckeditor
-  # alias_method :format_activity_description_without_ckeditor, :format_activity_description
-  # alias_method :format_activity_description, :format_activity_description_with_ckeditor
+  alias_method :format_activity_description_without_ckeditor, :format_activity_description
+  alias_method :format_activity_description, :format_activity_description_with_ckeditor
 end
